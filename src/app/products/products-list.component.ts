@@ -12,16 +12,27 @@
      imageWidth: number = 50;
      imageMargin: number = 2;
      showImage: boolean = false;
+
+     //change the listFilter property into a getter and setter like so:
+     //https://stackoverflow.com/questions/45167199/why-are-underscores-added-to-fields-of-a-typescript-class-in-angular4
      _listFilter: string;
+
+     //when the databinding needs the value, it will call the getter and get the value
      get listFilter(): string {
          return this._listFilter;
      }
+     //everytime the user modifies the value, the data bainding calls the setter, passing in the changed value
      set listFilter(value: string) {
          this._listFilter = value;
          this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products;
      }
 
-filteredProducts : IProducts [];
+    filteredProducts : IProducts [];
+
+    constructor() {
+        this.filteredProducts = this.products;
+        this.listFilter = 'cart';
+    }
 
      products: IProducts[] = [
         {
