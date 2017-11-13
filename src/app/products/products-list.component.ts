@@ -12,7 +12,17 @@
      imageWidth: number = 50;
      imageMargin: number = 2;
      showImage: boolean = false;
-     listFilter: string ='cart';
+     _listFilter: string;
+     get listFilter(): string {
+         return this._listFilter;
+     }
+     set listFilter(value: string) {
+         this._listFilter = value;
+         this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products;
+     }
+
+filteredProducts : IProducts [];
+
      products: IProducts[] = [
         {
             "productId": 1,
@@ -65,6 +75,15 @@
             "imageUrl": "http://openclipart.org/image/300px/svg_to_png/120337/xbox-controller_01.png"
         }
     ];
+
+    performFilter(filterBy: string) :IProducts[] {
+        filterBy = filterBy.toLocaleLowerCase();
+        //The filter() method creates an array filled with all array elements that pass a test (provided as a function). The first value is the value of the current element
+        return this.products.filter((product: IProducts) =>
+        // The indexOf() method returns the position of the first occurrence of a specified value in a string.This method returns -1 if the value to search for never occurs. The indexOf() method is case sensitive. 
+        // For each product list, the name is converted into lowercase, and the indexOf checks the array to see if the filterBy parameter (text) matches the product name/element item.
+        product.productName.toLocaleLowerCase().indexOf(filterBy) !== -1);
+    }
 
     toggleImage(): void {
         this.showImage = !this.showImage;
