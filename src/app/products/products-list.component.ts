@@ -104,4 +104,8 @@
         console.log('onInit was called');
     };
 
+    onRatingClicked(message:string): void {
+        this.pageTitle = 'Selected Product List Rating: ' +  message;
+    }
+
  }
