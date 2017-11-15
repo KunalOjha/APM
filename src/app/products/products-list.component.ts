@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {IProducts} from './products';
+import { Component, OnInit } from '@angular/core';
+
+import { IProducts } from './products';
 import { ProductService } from './product.service';
  
  @Component({
@@ -14,6 +15,9 @@ import { ProductService } from './product.service';
      imageMargin: number = 2;
      showImage: boolean = false;
      products: IProducts[];
+     filteredProducts : IProducts [];
+     errorMessage: string;
+     
 
      //change the listFilter property into a getter and setter like so:
      //https://stackoverflow.com/questions/45167199/why-are-underscores-added-to-fields-of-a-typescript-class-in-angular4
@@ -28,8 +32,6 @@ import { ProductService } from './product.service';
          this._listFilter = value;
          this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products;
      }
-
-    filteredProducts : IProducts [];
 
     constructor(private _productService : ProductService) {
     }
@@ -50,8 +52,13 @@ import { ProductService } from './product.service';
     ngOnInit(): void {
         console.log('onInit was called');
         //assigns list of products to local variable (products) from the ProductsService
-        this.products = this._productService.getProducts();
-        this.filteredProducts = this.products;
+        this._productService
+            .getProducts()
+            .subscribe(products=> {
+                            this.products = products;
+                            this.filteredProducts = this.products;
+                                },
+                        error => this.errorMessage = <any>error);
     };
 
     onRatingClicked(message:string): void {
